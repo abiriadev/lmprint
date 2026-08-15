@@ -130,26 +130,44 @@ export const OVERVIEW_WH = 0.3
 
 export interface Equivalence {
 	id: string
+	/** Plural form, and the singular for when the count rounds to one. */
 	label: string
+	one: string
 	/** Watt-hours per unit, or litres, or grams, depending on the metric. */
 	per: number
-	unit: string
 }
 
 export const ENERGY_EQUIVALENTS: Equivalence[] = [
-	{ id: 'phone', label: 'phone charge', per: 12, unit: 'Wh' },
-	{ id: 'bulb', label: 'minutes of a 9 W LED bulb', per: 9 / 60, unit: 'Wh' },
-	{ id: 'kettle', label: 'kettle boil', per: 110, unit: 'Wh' },
-	{ id: 'search', label: 'web searches', per: 0.3, unit: 'Wh' },
+	{
+		id: 'bulb',
+		label: 'minutes of a 9 W LED bulb',
+		one: 'minute of a 9 W LED bulb',
+		per: 9 / 60,
+	},
+	{ id: 'search', label: 'web searches', one: 'web search', per: 0.3 },
+	{ id: 'phone', label: 'phone charges', one: 'phone charge', per: 12 },
+	{ id: 'kettle', label: 'kettle boils', one: 'kettle boil', per: 110 },
 ]
 
 export const WATER_EQUIVALENTS: Equivalence[] = [
-	{ id: 'sip', label: 'sips of water', per: 0.03, unit: 'L' },
-	{ id: 'bottle', label: 'bottles of water', per: 0.5, unit: 'L' },
+	{ id: 'teaspoon', label: 'teaspoons', one: 'teaspoon', per: 0.005 },
+	{ id: 'sip', label: 'sips of water', one: 'sip of water', per: 0.03 },
+	{
+		id: 'bottle',
+		label: 'bottles of water',
+		one: 'bottle of water',
+		per: 0.5,
+	},
 ]
 
 export const CARBON_EQUIVALENTS: Equivalence[] = [
-	{ id: 'car', label: 'metres driven', per: 0.17, unit: 'g' },
+	{ id: 'car', label: 'metres driven', one: 'metre driven', per: 0.17 },
+	{
+		id: 'car-km',
+		label: 'kilometres driven',
+		one: 'kilometre driven',
+		per: 170,
+	},
 ]
 
 /** Populations the scale slider steps through. */

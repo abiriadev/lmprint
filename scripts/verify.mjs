@@ -62,6 +62,16 @@ try {
 		await page.goto(`chrome-extension://${id}/${surface.path}`, {
 			waitUntil: 'networkidle0',
 		})
+
+		// Load the seeded fortnight the same way the demo does, by
+		// double-clicking the wordmark, so the shots are not of an empty day.
+		await page.evaluate(() => {
+			document
+				.querySelector('h1')
+				?.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }))
+		})
+		await new Promise(r => setTimeout(r, 400))
+
 		await page.screenshot({
 			path: resolve(SHOTS, `${name}.png`),
 			fullPage: true,

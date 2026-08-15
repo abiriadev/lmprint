@@ -31,7 +31,11 @@ describe('equivalences', () => {
 		expect(energyEquivalent(12)).toContain('phone charge')
 		expect(energyEquivalent(400)).toContain('kettle')
 		expect(energyEquivalent(0.9)).toContain('web searches')
-		expect(energyEquivalent(0.1)).toContain('LED bulb')
+		expect(energyEquivalent(0.2)).toContain('LED bulb')
+	})
+
+	it('says one phone charge, not 1.0 phone charges', () => {
+		expect(energyEquivalent(12)).toBe('1 phone charge')
 	})
 
 	it('gives up rather than print a meaningless fraction', () => {

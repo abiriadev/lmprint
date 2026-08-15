@@ -41,15 +41,24 @@ export function range(r: Range, unit: (n: number) => string): string {
  * renders "0.001 of a car" teaches nobody anything.
  */
 function bestOf(list: Equivalence[], value: number): string | null {
-	const scored = list
+	// Largest unit that still reads as a whole quantity rather than a fraction.
+	const pick = list
 		.map(eq => ({ eq, count: value / eq.per }))
-		.filter(({ count }) => count >= 0.4)
-		.sort((a, b) => a.count - b.count)
-	const pick = scored[0]
+		.filter(({ count }) => count >= 0.8)
+		.sort((a, b) => a.count - b.count)[0]
 	if (!pick) return null
-	const count = pick.count
-	const shown = count >= 10 ? String(Math.round(count)) : sig(count)
-	return `${shown} ${pick.eq.label}`
+
+	const shown =
+		pick.count >= 10
+			? String(Math.round(pick.count))
+			: trim(sig(pick.count))
+	const noun = shown === '1' ? pick.eq.one : pick.eq.label
+	return `${shown} ${noun}`
+}
+
+/** "1.0" reads like a measurement, "1" reads like a thing. */
+function trim(s: string): string {
+	return s.replace(/\.0$/, '')
 }
 
 export function energyEquivalent(whValue: number): string | null {
