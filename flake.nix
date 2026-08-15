@@ -21,7 +21,17 @@
           packages = [
             nodejs
             pnpm
+            wrangler
           ];
+
+          shellHook = ''
+            export PUPPETEER_SKIP_DOWNLOAD=1
+            export PUPPETEER_EXECUTABLE_PATH=${lib.getExe chromium}
+            # workerd (wrangler dev) has no built-in CA store and cannot find one
+            # on NixOS, so outbound TLS (native fetch and cloudflare:sockets
+            # startTls) fails with "unable to get local issuer certificate".
+            export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+          '';
         };
       }
     )
