@@ -1,0 +1,68 @@
+{
+	"manifest_version": 3,
+	"name": "LMPrint",
+	"version": "0.1.0",
+	"description": "Estimate the energy, water and carbon footprint of your AI chatbot usage.",
+	"icons": {
+		"16": "icons/icon-16.png",
+		"32": "icons/icon-32.png",
+		"48": "icons/icon-48.png",
+		"128": "icons/icon-128.png"
+	},
+	"permissions": ["storage", "declarativeNetRequest", "tabs"],
+	"host_permissions": [
+		"https://chatgpt.com/*",
+		"https://chat.openai.com/*",
+		"https://claude.ai/*",
+		"https://gemini.google.com/*",
+		"https://www.perplexity.ai/*",
+		"https://github.com/*",
+		"https://www.google.com/*"
+	],
+	"background": {
+		"service_worker": "src/background/service-worker.ts",
+		"type": "module"
+	},
+	"action": {
+		"default_popup": "src/popup/index.html",
+		"default_title": "LMPrint"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://chatgpt.com/*",
+				"https://chat.openai.com/*",
+				"https://claude.ai/*",
+				"https://gemini.google.com/*",
+				"https://www.perplexity.ai/*",
+				"https://github.com/copilot*"
+			],
+			"js": ["src/content/collector.ts"],
+			"run_at": "document_idle"
+		},
+		{
+			"matches": [
+				"https://chatgpt.com/*",
+				"https://chat.openai.com/*",
+				"https://claude.ai/*"
+			],
+			"js": ["src/inject/interceptor.ts"],
+			"world": "MAIN",
+			"run_at": "document_start"
+		}
+	],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"src/methodology/index.html",
+				"src/dashboard/index.html"
+			],
+			"matches": ["<all_urls>"]
+		}
+	],
+	"declarative_net_request": {
+		"rule_resources": [
+			{ "id": "ruleset", "enabled": false, "path": "src/rules.json" }
+		]
+	}
+}
