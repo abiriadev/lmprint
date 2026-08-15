@@ -1,1 +1,30 @@
-[]
+[
+	{
+		"id": 1,
+		"priority": 2,
+		"action": { "type": "allow" },
+		"condition": {
+			"urlFilter": "udm=14",
+			"resourceTypes": ["main_frame"],
+			"requestDomains": ["google.com"]
+		}
+	},
+	{
+		"id": 2,
+		"priority": 1,
+		"action": {
+			"type": "redirect",
+			"redirect": {
+				"transform": {
+					"queryTransform": {
+						"addOrReplaceParams": [{ "key": "udm", "value": "14" }]
+					}
+				}
+			}
+		},
+		"condition": {
+			"urlFilter": "||google.com/search",
+			"resourceTypes": ["main_frame"]
+		}
+	}
+]

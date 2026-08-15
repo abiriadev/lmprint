@@ -1,6 +1,7 @@
 import type { RuntimeMessage } from '../lib/messages'
 import { addEvent, countBlocked, read } from '../lib/storage'
 import { badgeText, toEvent, whForDay } from './accounting'
+import { noteIfBlocked, syncBlocker } from './blocker'
 
 /**
  * MV3 service workers are killed after about 30 seconds idle, so this file
@@ -11,10 +12,12 @@ const BADGE_COLOUR = '#166534'
 
 chrome.runtime.onInstalled.addListener(() => {
 	void refreshBadge()
+	void syncBlocker()
 })
 
 chrome.runtime.onStartup.addListener(() => {
 	void refreshBadge()
+	void syncBlocker()
 })
 
 chrome.runtime.onMessage.addListener(
@@ -55,7 +58,18 @@ async function setBadge(wh: number) {
 	await chrome.action.setBadgeText({ text: badgeText(wh) })
 }
 
-// A settings change from the popup moves every number, the badge included.
+// A settings change from the popup moves every number, the badge included,
+// and flipping the blocker has to take effect without a reload.
 chrome.storage.onChanged.addListener((changes, area) => {
-	if (area === 'local' && 'settings' in changes) void refreshBadge()
+	if (area !== 'local' || !('settings' in changes)) return
+	void refreshBadge()
+	void syncBlocker()
+})
+
+// Counts the redirects the ruleset performed. A navigation that lands on
+// google.com/search already carrying udm=14 is one AI Overview that was never
+// generated. A user who clicks Google's own Web tab is counted too, which
+// overstates slightly rather than inventing anything.
+chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+	if (changeInfo.url) void noteIfBlocked(changeInfo.url)
 })
