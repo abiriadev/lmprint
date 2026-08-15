@@ -4,8 +4,7 @@ import type { AssumptionSetId, ModelClass, RegionId } from './types'
  * Every coefficient in LMPrint lives here, with the source it came from. The
  * methodology page renders this file directly, so a number that is not
  * described here does not exist in the product.
- */
-/**
+ *
  * Published per-query estimates span more than an order of magnitude. Rather
  * than pick a winner we ship both ends and let the user switch between them.
  */
