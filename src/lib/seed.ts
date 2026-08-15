@@ -1,6 +1,6 @@
 import type { InferenceEvent, ModelClass } from '../model/types'
 import { tokensFromChars } from './tokens'
-import { dayKey, write, read, type Store } from './storage'
+import { dayKey, write, read, RETAIN_DAYS, type Store } from './storage'
 
 /**
  * Venue wifi dies, accounts hit rate limits, and a demo with an empty popup
@@ -112,7 +112,10 @@ function lcg(seed: number) {
 	}
 }
 
-export function seedEvents(days = 7, now = Date.now()): InferenceEvent[] {
+export function seedEvents(
+	days = RETAIN_DAYS,
+	now = Date.now(),
+): InferenceEvent[] {
 	const random = lcg(20260815)
 	const events: InferenceEvent[] = []
 
@@ -147,7 +150,7 @@ export function seedEvents(days = 7, now = Date.now()): InferenceEvent[] {
 }
 
 export function seedStore(
-	days = 7,
+	days = RETAIN_DAYS,
 	now = Date.now(),
 ): Pick<Store, 'events' | 'blocked'> {
 	const events: Store['events'] = {}
