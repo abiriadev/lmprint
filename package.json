@@ -10,6 +10,7 @@
 		"typecheck": "tsc",
 		"icons": "node scripts/gen-icons.mjs",
 		"verify": "node scripts/verify.mjs",
+		"simulate": "node scripts/simulate.mjs",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"format": "prettier --write ."
